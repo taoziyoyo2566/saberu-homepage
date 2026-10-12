@@ -1,0 +1,6 @@
+# Local verification only: publishes the web container on the loopback address.
+#   docker compose -f compose.yaml -f compose.local.yaml up -d --build web
+services:
+  web:
+    ports:
+      - "127.0.0.1:3000:3000"

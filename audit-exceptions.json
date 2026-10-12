@@ -1,0 +1,18 @@
+{
+  "$comment": "Accepted npm audit advisories for development-only dependencies, scoped to the exact dependency paths. Policy and review steps: docs/development.md. Production advisories are never accepted. An entry stops passing after reviewBy.",
+  "exceptions": [
+    {
+      "advisory": "GHSA-vfj7-8cjw-p6xm",
+      "package": "braces",
+      "paths": [
+        "eslint-config-next>@next/eslint-plugin-next>fast-glob>micromatch>braces"
+      ],
+      "scope": "dev",
+      "reason": "ESLint runs this chain at lint time only: @next/eslint-plugin-next uses fast-glob to expand settings.next.rootDir from this repository's own ESLint config (unset here), so no attacker-controlled pattern reaches braces. None of these packages is in the runtime image.",
+      "blocker": "No patched braces release exists (all versions <=3.0.3 are affected; upstream fix PRs are unmerged) and @next/eslint-plugin-next 16.4.0 pins fast-glob 3.3.1. Never run npm audit fix --force here: it downgrades eslint-config-next to 14.x.",
+      "owner": "operator (decision of 2026-10-12, recorded in the plan)",
+      "acceptedOn": "2026-10-12",
+      "reviewBy": "2027-01-12"
+    }
+  ]
+}

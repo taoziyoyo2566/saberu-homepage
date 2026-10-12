@@ -1,0 +1,62 @@
+name: saberu-homepage
+
+services:
+  web:
+    build:
+      context: .
+    image: saberu-homepage:local
+    restart: unless-stopped
+    init: true
+    # Next.js drains in-flight requests on SIGTERM; give it more than Docker's 10 s default.
+    stop_grace_period: 30s
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+      - /app/.next/cache:size=64m,uid=1001,gid=1001
+      # Next.js 16.4 persists request-rendered dynamic routes here; bounded and volatile on purpose.
+      - /app/.next/server/route-cache:size=32m,uid=1001,gid=1001
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      # Set to "true" only when every request reaches this server through the
+      # Cloudflare Tunnel, so CF-IPCountry cannot be forged by a client (P3).
+      TRUST_CF_IPCOUNTRY: "false"
+    networks:
+      - homepage
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+  # Not started by default: `docker compose --profile tunnel up -d` once P3 has
+  # prepared deploy/cloudflared.env with the homepage tunnel token.
+  cloudflared:
+    image: cloudflare/cloudflared:2026.10.0@sha256:9b49eed8f62806d5d45ddf59ecefb5710429598ea6d3fcccd2af938f621b2b07
+    profiles:
+      - tunnel
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    env_file:
+      - path: deploy/cloudflared.env
+        required: false
+    depends_on:
+      web:
+        condition: service_healthy
+    read_only: true
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      - homepage
+
+networks:
+  homepage:
+    driver: bridge

@@ -1,0 +1,41 @@
+# Local scratch space for temporary files; never committed.
+/tmp/
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+/.vitest/
+/test-results/
+/playwright-report/
+/blob-report/
+
+# next.js
+/.next/
+/out/
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+
+# env files: real values stay out of Git, redacted examples stay in
+.env*
+!.env*.example
+/deploy/*.env
+# recovery copies of live Cloudflare configuration (may hold content not meant for a public repo)
+/deploy/recovery/
+
+# terraform: provider cache, local state and saved plans stay out of Git;
+# .terraform.lock.hcl is committed
+/infra/**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+crash.log
+crash.*.log
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts

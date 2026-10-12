@@ -1,0 +1,81 @@
+{
+  "metadata": {
+    "title": "saberu | We build and run web software",
+    "description": "saberu is an independent software studio. We design, build, and maintain focused web software, on your own servers if you prefer."
+  },
+  "header": {
+    "home": "saberu home",
+    "navigation": "Main",
+    "nav": {
+      "services": "Services",
+      "approach": "Approach",
+      "about": "About",
+      "contact": "Contact"
+    }
+  },
+  "languageSwitcher": {
+    "label": "Language"
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Independent software studio",
+      "title": "We build focused web software and keep it running",
+      "lead": "Tell us the problem. We design the simplest software that solves it, build it, and maintain it after launch, on your own servers if you prefer.",
+      "primaryCta": "Email us",
+      "secondaryCta": "See the product"
+    },
+    "services": {
+      "heading": "What we do",
+      "intro": "We do three kinds of work, each starting from your problem rather than from a technology. You can ask for one of them or all three.",
+      "items": {
+        "build": {
+          "title": "A tool for a specific job",
+          "body": "When ready-made software does not fit how you work, we design and build a web application that does, without features you will not use."
+        },
+        "run": {
+          "title": "Maintenance after launch",
+          "body": "Software needs ongoing care. We apply updates and security fixes, monitor it, test that backups can be restored, and fix problems as they arise."
+        },
+        "host": {
+          "title": "Hosting on your own servers",
+          "body": "If you would rather keep data and services on your own servers than on a third-party platform, we set up that infrastructure and look after it."
+        }
+      }
+    },
+    "approach": {
+      "heading": "How we work",
+      "intro": "We follow three rules on every project, so you know what to expect.",
+      "items": {
+        "scope": {
+          "title": "Scope agreed in advance",
+          "body": "Before we build, we agree in writing on what the software will and will not do. Then we work in small steps you can review one at a time."
+        },
+        "verify": {
+          "title": "Checked before release",
+          "body": "We test every change before it goes live, and we can return to the previous version if something goes wrong. You can see what changed and why."
+        },
+        "ownership": {
+          "title": "Code and data stay yours",
+          "body": "You keep the code, the data, and access to every account. We document the setup, so you can continue with us or without us."
+        }
+      }
+    },
+    "about": {
+      "heading": "About saberu",
+      "body": "saberu is an independent software studio. We do not stop at delivery: after launch, we stay responsible for keeping the software updated and running. To learn more about how we work, or whether we can take on your project, write to us."
+    },
+    "contact": {
+      "heading": "Write to us",
+      "body": "A few lines are enough to start: what you want to solve and any constraints, such as timing, budget, or where it has to run.",
+      "email": "Send an email"
+    }
+  },
+  "footer": {
+    "copyright": "© {year} saberu"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "There is no page at this address. It may have been moved or removed, or the link may contain a typo.",
+    "backHome": "Back to the homepage"
+  }
+}

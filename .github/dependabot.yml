@@ -1,0 +1,103 @@
+# Dependency updates. npm, the Node base image and the Terraform provider stay
+# within their current major version (package.json uses ^ ranges, the provider
+# ~>; a new major is a deliberate, manual upgrade). GitHub Actions and Compose
+# images are proposed at any version. A 7-day cooldown keeps freshly published
+# (possibly compromised) releases out of version updates. Security updates are
+# switched on in the repository settings when the repository is created; they
+# skip the cooldown. Commit messages follow the project's format: chore(deps) /
+# chore(deps-dev).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Tokyo
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      framework:
+        patterns:
+          - next
+          - eslint-config-next
+          - "@next/*"
+          - next-intl
+          - react
+          - react-dom
+          - "@types/react"
+          - "@types/react-dom"
+      development-tools:
+        dependency-type: development
+        update-types: [minor, patch]
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Tokyo
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: chore
+      include: scope
+    groups:
+      github-actions:
+        patterns: ["*"]
+
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Tokyo
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: chore
+      include: scope
+    ignore:
+      - dependency-name: node
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: docker-compose
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Tokyo
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: chore
+      include: scope
+    ignore:
+      # Built locally from this repository's Dockerfile, not pulled from a registry.
+      - dependency-name: saberu-homepage
+
+  - package-ecosystem: terraform
+    directory: /infra/cloudflare
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Asia/Tokyo
+    cooldown:
+      default-days: 7
+    commit-message:
+      prefix: chore
+      include: scope
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
