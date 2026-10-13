@@ -17,11 +17,11 @@ function escapeHtml(value: string): string {
  * canonical owner; the proxy cannot load the built stylesheet.
  */
 const STYLE =
-  ":root{color-scheme:light dark;--bg:#f5f7f9;--fg:#17212b;--muted:#5b6875;--line:#d3dae1;--accent:#0a6c86}" +
-  "@media (prefers-color-scheme:dark){:root{--bg:#0f151b;--fg:#e4ebf1;--muted:#9aa8b5;--line:#2c3843;--accent:#52b6d1}}" +
+  ":root{color-scheme:light dark;--bg:#ffffff;--fg:#0a0a0a;--muted:#737373;--line:#e5e5e5;--accent:#155dfc}" +
+  "@media (prefers-color-scheme:dark){:root{--bg:#0a0a0a;--fg:#fafafa;--muted:#a1a1a1;--line:#262626;--accent:#2b7fff}}" +
   "body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:var(--bg);color:var(--fg);font-family:system-ui,sans-serif;line-height:1.6}" +
   "main{max-width:40rem}h1{font-size:1.75rem;margin:.5rem 0 1rem}p{margin:0;color:var(--muted)}" +
-  "a{display:inline-block;margin-top:1.5rem;padding:.5rem 1rem;border:1px solid var(--line);border-radius:6px;color:var(--accent);text-decoration:none}" +
+  "a{display:inline-block;margin-top:1.5rem;padding:.5rem 1.25rem;border:1px solid var(--line);border-radius:999px;color:var(--accent);text-decoration:none}" +
   "a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}";
 
 /**

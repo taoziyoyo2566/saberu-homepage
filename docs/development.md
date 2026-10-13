@@ -245,14 +245,14 @@ provider 版本由 Dependabot 更新；`.terraform.lock.hcl` 记录 linux_amd64 
 
 | 需求 | 位置 | 生效方式 |
 |---|---|---|
-| 文案 | `messages/{zh,en,ja}.json` | 三份键集合与 ICU 参数必须一致，`npm run test` 校验 |
-| 服务、工作方式卡片 | `messages/*.json` 的 `home.services.items`、`home.approach.items` | 每种语言加同样的键即增加卡片，组件不用改 |
+| 文案 | `messages/{zh,en,ja}.json` | 三份键集合、ICU 参数与富文本标签必须一致，`npm run test` 校验。首页标题中 `<em>…</em>` 包住的部分显示为渐变色 |
+| 服务、工作方式卡片 | `messages/*.json` 的 `home.services.items`、`home.approach.items` | 每种语言加同样的键即增加卡片。新服务卡片使用默认图标，要换图标时在 `home-sections.tsx` 的 `serviceIcons` 中按键登记 |
 | 首页分区与导航 | `src/components/home-sections.tsx` 的 `homeSectionIds` 与对应组件 | 页眉导航读同一列表；冒烟检查要求每个导航锚点都存在 |
 | 语言、默认语言、国家兜底、偏好 Cookie | `src/config/locales.ts` | 导入时自检，非法配置使构建失败 |
 | 品牌、域名、邮箱、产品入口、外链、内容状态 | `src/config/site.ts` | `npm run release:check` 决定能否发布 |
 | Cloudflare 上与主页有关的配置（DNS、Tunnel、跳转规则） | `infra/cloudflare/` | 生成计划、经用户批准后执行（见“Cloudflare 配置”） |
 | 新公开页面 | `src/app/[locale]/<path>/page.tsx`，并登记到 `src/config/public-pages.ts` | 未登记的路径由 proxy 返回 404，也不进入 sitemap |
-| 设计 token、字体栈 | `src/app/globals.css` | 浅深色均在此定义。proxy 的 404 文档、`brandColors`（标志与生成的图片）和 `icon.svg` 读不到样式表，各自保留颜色副本；`tests/unit/design-tokens.test.ts` 检查它们与此一致 |
+| 设计 token、字体栈 | `src/app/globals.css` | 浅深色与品牌色阶均在此定义。proxy 的 404 文档、`brandColors`（标志与生成的图片）和 `icon.svg` 读不到样式表，各自保留颜色副本；`tests/unit/design-tokens.test.ts` 检查它们与此一致 |
 | 品牌标志 | `src/app/icon.svg` 与 `src/components/brand-mark.tsx`（同一几何，需同步） | 图标、苹果图标、页眉标志与分享图 |
 | 地区头是否可信 | 环境变量 `TRUST_CF_IPCOUNTRY=true` | 仅当所有请求经 Cloudflare → Tunnel 到达时设置（P3） |
 | 被接受的开发期审计公告 | `audit-exceptions.json` | 必须写明理由与复核日期 |

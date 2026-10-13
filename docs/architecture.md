@@ -50,12 +50,13 @@
 | `src/app/[locale]/not-found.tsx`、`[...rest]/page.tsx` | 应用内 `notFound()` 的边界与安全网 | 应用内 404 |
 | `src/app/healthz/route.ts` | `connection()` 后返回 `{status:"ok"}`，`no-store` | 进程存活 |
 | `src/app/sitemap.ts`、`robots.ts` | 由语言注册与页面清单派生；每条列出全部语言含自身，首页含 `x-default` | 抓取信息 |
-| `src/app/globals.css` | Tailwind v4 导入、浅深色 token（`:root` + `prefers-color-scheme`，经 `@theme inline` 映射）、按 `:lang()` 的中日字体栈（作用于任何带 `lang` 的元素，如切换器中的语言名）、焦点样式；404 文档、`brandColors` 与 `icon.svg` 中的颜色副本由 `tests/unit/design-tokens.test.ts` 对照 | 设计 token |
-| `src/components/home-sections.tsx` | 首页分区（主视觉、服务、工作方式、关于、联系）与 `homeSectionIds`；卡片按文案中的条目生成 | 首页结构 |
-| `src/components/site-header.tsx`、`site-footer.tsx` | 页眉（标志、按 `homeSectionIds` 生成的分区导航、切换器）、页脚（`use cache` 的年份） | 页面框架 |
+| `src/app/globals.css` | Tailwind v4 导入、浅深色 token（`:root` + `prefers-color-scheme`，经 `@theme inline` 映射；含渐变与极光用的品牌色阶）、按 `:lang()` 的中日字体栈（作用于任何带 `lang` 的元素，如切换器中的语言名）、拉丁标题的紧排工具类、动效关键帧、焦点样式；404 文档、`brandColors` 与 `icon.svg` 中的颜色副本由 `tests/unit/design-tokens.test.ts` 对照 | 设计 token |
+| `src/components/home-sections.tsx` | 首页分区（主视觉、服务、工作方式、关于、联系）与 `homeSectionIds`；卡片按文案中的条目生成，服务卡片的图标按条目键选择 | 首页结构 |
+| `src/components/velora/`、`src/components/icons.tsx` | 移植自 Velora UI 的视觉部件（极光背景、网格与点阵、渐变文字、带光泽的行动链接）与 Lucide 图标；都是服务端渲染、只用 CSS 动画，并遵守减少动效设置。许可声明见 `THIRD_PARTY_NOTICES.md` | 视觉部件 |
+| `src/components/site-header.tsx`、`site-footer.tsx` | 吸顶页眉（标志、按 `homeSectionIds` 生成的分区导航、切换器；窄屏时导航换到第二行）、页脚（分区链接、邮箱、`use cache` 的年份） | 页面框架 |
 | `src/components/language-switcher.tsx` | 客户端组件：真实链接可无 JS 使用；有 JS 时写偏好 Cookie、`router.replace` 到目标语言并保留 query/hash/滚动意图 | 语言切换 |
 
-`messages/zh.json`、`en.json`、`ja.json` 的键集合、非空与 ICU 参数由单元测试保证；
+`messages/zh.json`、`en.json`、`ja.json` 的键集合、非空、ICU 参数与富文本标签由单元测试保证；
 `src/global.d.ts` 把英文文案的结构注册为 next-intl 的 `Messages` 类型，键名在编译期检查。
 服务与工作方式的卡片按 `home.services.items`、`home.approach.items` 中的键依次生成，
 增删卡片只改三份文案。`site.contentStatus` 记录文案由谁负责，发布门槛只接受 `confirmed`。

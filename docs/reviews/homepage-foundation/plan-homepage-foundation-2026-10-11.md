@@ -1,6 +1,6 @@
 # saberu.com 品牌主页：项目设计方案
 
-Status: APPROVED（批准范围：2026-10-11 P1 本地实施；2026-10-12 增加 P2 demo 内容起草与仓库/CI 工程框架的本地文件，并决定建立公开仓库、以初始导入为首次提交，执行以经确认的受保护操作说明为准；2026-10-12 决定 P3 的 Cloudflare 侧变更经 [Cloudflare 配置代码化方案](../cloudflare-config/plan-cloudflare-config-2026-10-12.md)执行；此后的发布与 P3 另行授权）
+Status: APPROVED（批准范围：2026-10-11 P1 本地实施；2026-10-12 增加 P2 demo 内容起草与仓库/CI 工程框架的本地文件，并决定建立公开仓库、以初始导入为首次提交，执行以经确认的受保护操作说明为准；2026-10-12 决定 P3 的 Cloudflare 侧变更经 [Cloudflare 配置代码化方案](../cloudflare-config/plan-cloudflare-config-2026-10-12.md)执行；2026-10-13 决定 P2 demo 视觉改以 Velora UI 为基础、在第 6 节约束内实施，配色用 Velora Blue，取代同日以 Vercel Portfolio Blog Starter 为基础的决定，博客延后；此后的发布与 P3 另行授权）
 
 本文件是主页基础建设工作流唯一的当前方案，替代两份旧方案；P1 本地实施已获授权，发布与上线尚未执行。
 
@@ -21,6 +21,12 @@ Status: APPROVED（批准范围：2026-10-11 P1 本地实施；2026-10-12 增加
 2026-10-12（Asia/Tokyo），用户对远程仓库可见性与时机的答复，原话照录：“按你的建议，公开仓库，现在就建”。决定：建立公开仓库 `taoziyoyo2566/saberu-homepage`，以初始导入作为首次提交并推送；按 `docs/development.md` 配置仓库的安全功能与 `main` 的规则集，分支、提交与合并约定同时写入项目文档。创建、提交与推送都是受保护操作，执行以提交给用户确认的操作说明为准。准备时发现，归档的 2026-10-10 原稿含主机名、主机上其他服务的描述和未处理问题的提示，验证记录的环境快照也含主机名；此前答复中"验证记录里的主机名是仓库中唯一的主机标识"的说法有误。操作说明建议在首次提交前删去这些细节。
 
 2026-10-12（Asia/Tokyo），用户提出由本仓库的配置管理 Cloudflare 一侧，并对编码助手的 Terraform 建议答复：“同意”。决定：P3 在 Cloudflare 侧的变更（主页 Tunnel、DNS 切换、`www` 跳转、移除维护页挂载）经独立工作流 [Cloudflare 配置代码化方案](../cloudflare-config/plan-cloudflare-config-2026-10-12.md)的配置与流程执行，每次执行逐次授权；P3 的进入条件、检查点与恢复目标仍以本方案第 7 节为准。saberu.com 的 Cloudflare 现状见[现状调查记录](../cloudflare-config/investigation-cloudflare-current-state-2026-10-12.md)。
+
+2026-10-13（Asia/Tokyo），以下两项决定由另一会话记入工作树 `feat/portfolio-starter-design` 的方案副本；该副本未提交，不会并入，故在此照录。用户否定 P2 demo 的视觉，原话照录：“https://portfolio-blog-starter.vercel.app/ 我想用这个template做一个homepage，你给出的太难看了。要做到符”（消息在此中断），随后补充：“可以参考这个ChatGPT给出的结果”。该会话据此决定 P2 demo 视觉改用 Vercel 官方模板 Portfolio Blog Starter 的版式；此决定已由本节下文取代。同日用户答复博客问题，原话照录：“博客以后再做，先把首页做好看”。决定（仍有效）：本次只做首页视觉，第 2 节所列的博客延后，开始做博客时再定范围与三语策略。待用户补充（不阻塞）：中断的后半句“要做到符…”所指的要求。
+
+2026-10-13（Asia/Tokyo），用户认为 P2 demo 的页面"太难看了"，要求调查 ChatGPT 推荐的 Next.js 模板。编码助手核对候选的许可证、版本与维护情况并对比截图后，推荐以 Velora UI（`ColorlibHQ/velora-ui`，MIT 许可）为参考和区块来源。用户答复，原话照录：“就用 Velora UI，开分支开始做”。决定：P2 demo 视觉改以 Velora UI 的设计与区块为基础，在分支 `feat/visual-redesign` 上实施。实施遵守第 6 节：不引入组件库或客户端动画库，只把所需区块的结构与样式移植到现有组件；动效用 CSS 实现并遵守减少动效设置；没有 JavaScript 时正文与联系方式仍可读、可用。第 2 节的页面结构，以及第 4、5 节的契约不变。改版期间可在本机预览中切换几套配色作比较；选定后只保留一套，并保留浅色与深色。
+
+同日用户在本机预览中比较配色后答复，原话照录：“用 Velora Blue，取代另一个分支”。决定：配色采用 Velora Blue（取值以 `src/app/globals.css` 为准），删除临时的配色切换；Velora UI 方向取代上文以 Vercel Portfolio Blog Starter 为基础的决定，按那个方向改版的分支 `feat/portfolio-starter-design` 不再作为合并候选。
 
 ## 1. 目标与当前基础
 

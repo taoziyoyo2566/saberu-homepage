@@ -5,10 +5,10 @@
  * geometry on the 64-unit grid as a static file; keep the two in step.
  */
 export const brandColors = {
-  accent: "#0a6c86",
-  ink: "#0f151b",
+  accent: "#155dfc",
+  ink: "#0a0a0a",
   paper: "#ffffff",
-  muted: "#9aa8b5",
+  muted: "#a1a1a1",
 } as const;
 
 interface BrandMarkProps {
