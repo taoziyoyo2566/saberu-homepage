@@ -18,7 +18,13 @@ import {
  * images (no CSS at all) and the static icon. This test keeps them in step.
  */
 const { light, dark } = readThemeTokens();
-const shared = ["bg", "fg", "muted", "line", "accent"];
+const shared = [
+  "background",
+  "foreground",
+  "muted-foreground",
+  "border",
+  "primary",
+];
 
 describe("design token copies", () => {
   it("are read from globals.css", () => {
@@ -43,13 +49,13 @@ describe("design token copies", () => {
   });
 
   it("match in the brand mark, the generated images and the static icon", () => {
-    expect(brandColors.accent).toBe(light.accent);
-    expect(brandColors.ink).toBe(dark.bg);
-    expect(brandColors.muted).toBe(dark.muted);
+    expect(brandColors.accent).toBe(light.primary);
+    expect(brandColors.ink).toBe(dark.background);
+    expect(brandColors.muted).toBe(dark["muted-foreground"]);
     const icon = readFileSync(
       new URL("../../src/app/icon.svg", import.meta.url),
       "utf8",
     );
-    expect(icon).toContain(`fill="${light.accent}"`);
+    expect(icon).toContain(`fill="${light.primary}"`);
   });
 });

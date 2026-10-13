@@ -101,7 +101,7 @@ export function LanguageSwitcher() {
 
   return (
     <nav aria-label={t("label")}>
-      <ul className="flex items-center gap-0.5 rounded-full border border-line bg-surface/70 p-0.5 text-xs">
+      <ul className="flex items-center gap-0.5 rounded-full border border-border bg-card/70 p-0.5 text-xs">
         {locales.map((entry) => {
           const isCurrent = entry.id === currentLocale;
           return (
@@ -115,8 +115,8 @@ export function LanguageSwitcher() {
                 onClick={(event) => choose(event, entry.id)}
                 className={`block rounded-full px-2.5 py-1 whitespace-nowrap transition-colors ${
                   isCurrent
-                    ? "bg-accent-soft font-semibold text-accent"
-                    : "text-muted hover:text-foreground"
+                    ? "bg-primary-soft font-semibold text-primary"
+                    : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {entry.label}

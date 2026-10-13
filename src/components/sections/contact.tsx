@@ -20,7 +20,7 @@ export async function ContactSection({ id }: Pick<ContactSection, "id">) {
       className={`${anchorOffset} pb-24 sm:pb-32`}
     >
       <div className={container}>
-        <div className="relative isolate overflow-hidden rounded-3xl border border-line bg-surface px-6 py-16 text-center sm:px-16 sm:py-24">
+        <div className="relative isolate overflow-hidden rounded-3xl border border-border bg-card px-6 py-16 text-center sm:px-16 sm:py-24">
           <AuroraBackground />
           <GridPattern className="[mask-image:radial-gradient(ellipse_60%_60%_at_50%_100%,black,transparent)]" />
           <div className="relative">
@@ -30,7 +30,7 @@ export async function ContactSection({ id }: Pick<ContactSection, "id">) {
             >
               {t("heading")}
             </h2>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-pretty text-muted">
+            <p className="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-pretty text-muted-foreground">
               {t("body")}
             </p>
             <div className="mt-10 flex flex-col items-center gap-4">
@@ -40,7 +40,7 @@ export async function ContactSection({ id }: Pick<ContactSection, "id">) {
               </ShimmerLink>
               <a
                 href={`mailto:${site.contactEmail}`}
-                className="text-sm font-medium break-all text-muted underline-offset-4 hover:text-accent hover:underline"
+                className="text-sm font-medium break-all text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
               >
                 {site.contactEmail}
               </a>

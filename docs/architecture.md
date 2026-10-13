@@ -35,7 +35,7 @@
 |---|---|---|
 | `src/config/locales.ts` | 语言注册（ID、BCP 47 标签、显示名、Open Graph 地区代码）、默认语言、国家兜底表、偏好 Cookie 名与期限；导入时自检 | 语言事实 |
 | `src/config/site.ts` | 品牌名、规范域名、联系邮箱、产品入口、外链、`contentStatus`（`placeholder`／`demo`／`confirmed`）；`findSiteReleaseErrors` 供发布门槛 | 站点事实 |
-| `src/config/home.ts` | 首页区块：每项是一种版式（`hero`、`cards`、`steps`、`text`、`contact`）的一个实例，含 ID、是否启用、是否进入导航与版式参数；派生出启用的区块、导航锚点与首屏区块。类型把 ID 绑定到英文文案中形状匹配的 `home.<id>`；导入时自检结构与英文文案，`tests/unit/home-sections.test.ts` 检查每种语言 | 首页组成 |
+| `src/config/home.ts` | 首页区块：每项是一种版式（`hero`、`cards`、`steps`、`text`、`contact`）的一个实例，含 ID、是否启用、用哪种设计绘制（`design`：`velora` 或 `shadcnblocks`）、是否进入导航与版式参数；派生出启用的区块、导航锚点与首屏区块。类型把 ID 绑定到英文文案中形状匹配的 `home.<id>`；导入时自检结构与英文文案，`tests/unit/home-sections.test.ts` 检查每种语言 | 首页组成 |
 | `src/config/public-pages.ts` | 已发布公开页面（无语言前缀）；proxy 与 sitemap 读取。页眉导航不读它，区块导航来自 `src/config/home.ts` 的 `homeNavSectionIds` | 页面清单 |
 | `src/i18n/negotiation.ts` | 纯函数：解析 `Accept-Language`、best-fit 匹配、偏好 → 浏览器 → 可信国家 → 默认 | 协商规则 |
 | `src/i18n/preferences.ts` | `SABERU_LOCALE` 的读取与序列化（host-only、`Path=/`、`SameSite=Lax`、365 天、HTTPS 下 `Secure`） | 偏好 Cookie |
@@ -51,8 +51,9 @@
 | `src/app/[locale]/not-found.tsx`、`[...rest]/page.tsx` | 应用内 `notFound()` 的边界与安全网 | 应用内 404 |
 | `src/app/healthz/route.ts` | `connection()` 后返回 `{status:"ok"}`，`no-store` | 进程存活 |
 | `src/app/sitemap.ts`、`robots.ts` | 由语言注册与页面清单派生；每条列出全部语言含自身，首页含 `x-default` | 抓取信息 |
-| `src/app/globals.css` | Tailwind v4 导入、浅深色 token（`:root` + `prefers-color-scheme`，经 `@theme inline` 映射；含渐变与极光用的品牌色阶）、按 `:lang()` 的中日字体栈（作用于任何带 `lang` 的元素，如切换器中的语言名）、拉丁标题的紧排工具类、动效关键帧、焦点样式；404 文档、`brandColors` 与 `icon.svg` 中的颜色副本由 `tests/unit/design-tokens.test.ts` 对照 | 设计 token |
-| `src/components/home-sections.tsx`、`src/components/sections/` | `HomeSections` 按配置顺序渲染启用的区块；`sections/` 每个文件是一种版式，从 `home.<id>` 读文案、以 ID 为锚点，进入导航的区块把导航名作为眉标；卡片与步骤按文案中的条目生成，卡片图标按配置中的图标名选择 | 区块版式 |
+| `src/app/globals.css` | Tailwind v4 导入、浅深色 token（`:root` + `prefers-color-scheme`，按 shadcn/ui 的语义名命名，经 `@theme inline` 映射；含渐变与极光用的品牌色阶）、按 `:lang()` 的中日字体栈（作用于任何带 `lang` 的元素，如切换器中的语言名）、拉丁标题的紧排工具类（正文区内的中日文不收紧字距）、与页眉同宽的 `container`、动效关键帧，以及 `@layer base` 中的默认边框色与焦点样式；404 文档、`brandColors` 与 `icon.svg` 中的颜色副本由 `tests/unit/design-tokens.test.ts` 对照 | 设计 token |
+| `src/components/home-sections.tsx`、`src/components/sections/` | `HomeSections` 按配置顺序渲染启用的区块，每种版式在每种设计下登记一个组件。`sections/` 的文件是 Velora 设计的版式，`sections/shadcnblocks/` 是用 shadcnblocks 区块绘制的同一组版式：都从 `home.<id>` 读文案、以 ID 为锚点；卡片与步骤按文案中的条目生成（`sections/shared.tsx` 的 `sectionItems`），卡片图标按配置中的图标名选择。Velora 设计中进入导航的区块把导航名作为眉标；shadcnblocks 区块由 `BlockSection` 包住，提供锚点和以标题命名的区域 | 区块版式 |
+| `src/components/shadcnblocks/`、`src/components/ui/`、`components.json` | shadcnblocks.com 的免费区块（文件开头注明来源与改动），以及它们依赖的 shadcn/ui 组件（Base UI，样式 `base-nova`）；`components.json` 是 shadcn CLI 的配置。区块是服务端组件，链接用 `ui/button-variants.ts` 的 `buttonVariants` 渲染为 `<a>`；`ui/button.tsx` 的 `Button` 留给真正的按钮，目前没有使用。首页当前全部用 Velora 设计，这些区块未启用。许可见 `THIRD_PARTY_NOTICES.md` | 注册表组件 |
 | `src/components/velora/`、`src/components/icons.tsx` | 移植自 Velora UI 的视觉部件（极光背景、网格与点阵、渐变文字、带光泽的行动链接）与 Lucide 图标；都是服务端渲染、只用 CSS 动画，并遵守减少动效设置。许可声明见 `THIRD_PARTY_NOTICES.md` | 视觉部件 |
 | `src/components/site-header.tsx`、`site-footer.tsx` | 吸顶页眉（标志、按 `homeNavSectionIds` 生成的区块导航、切换器；窄屏时导航换到第二行）、页脚（首屏区块的眉标作标语、区块链接、邮箱、`use cache` 的年份） | 页面框架 |
 | `src/components/language-switcher.tsx` | 客户端组件：真实链接可无 JS 使用；有 JS 时写偏好 Cookie、`router.replace` 到目标语言并保留 query/hash/滚动意图 | 语言切换 |
@@ -118,6 +119,10 @@ Next.js 16.4 + Cache Components 下，页面调用 `notFound()`（或根布局�
 - 浏览器基线：Tailwind CSS v4 需要 Chrome 111+、Safari 16.4+、Firefox 128+；更旧浏览器不在支持范围。
 - 图片优化关闭（`images.unoptimized`），P1 无位图；引入真实图片时再决定优化与缓存目录大小。
 - 中日文字体依赖系统字体栈；拉丁字体为自托管 Geist（`geist` 包，完整字形）。
+- lucide-react 1.x 的图标是客户端组件。`home-sections.tsx` 登记了用到它的 shadcnblocks 区块，所以即使这些区块
+  未启用，`/en` 也比只有 Velora 设计时多加载 2,511 字节（压缩前）的脚本（2026-10-14 构建）。
+- shadcnblocks 区块按英文短标题设计，中文的大标题可能在词中间换行（如首屏标题与"我们的工作方式"），
+  这类排版目前没有调整。
 - 绕过 proxy 的未知路径（带扩展名）得到的是客户端渲染的 404 外壳，可接受。
 - next-intl 已将 `requestLocale` 与 `setRequestLocale` 标记为废弃，本项目未使用。
 - 绕过 proxy、带扩展名的未知路径会由 Next.js 按需渲染，并在有界的 `route-cache` tmpfs 中留下记录；

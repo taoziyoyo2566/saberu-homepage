@@ -32,7 +32,7 @@ test("light theme by default", async ({ page }) => {
   await page.goto("/zh");
   expect(
     await page.evaluate(() => getComputedStyle(document.body).backgroundColor),
-  ).toBe(hexToRgb(theme.light.bg));
+  ).toBe(hexToRgb(theme.light.background));
 });
 
 test.describe("dark theme", () => {
@@ -44,7 +44,7 @@ test.describe("dark theme", () => {
       await page.evaluate(
         () => getComputedStyle(document.body).backgroundColor,
       ),
-    ).toBe(hexToRgb(theme.dark.bg));
+    ).toBe(hexToRgb(theme.dark.background));
   });
 });
 

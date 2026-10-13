@@ -31,7 +31,7 @@ export async function TextSection({ id }: Pick<TextSection, "id">) {
           heading={t("heading")}
           centered={false}
         />
-        <p className="text-lg leading-relaxed text-pretty text-muted md:pt-9 md:text-xl">
+        <p className="text-lg leading-relaxed text-pretty text-muted-foreground md:pt-9 md:text-xl">
           {t("body")}
         </p>
       </div>
