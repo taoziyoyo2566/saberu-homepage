@@ -48,19 +48,29 @@ interface ContactCopy {
   readonly email: string;
 }
 
-interface Listed {
+/**
+ * The look a section is drawn in: "velora" is the site's own design (Velora
+ * UI), "shadcnblocks" draws each layout type with a free block from
+ * shadcnblocks.com. Both read the same copy.
+ */
+export type HomeDesign = "velora" | "shadcnblocks";
+
+interface Drawn {
   readonly enabled: boolean;
+  readonly design: HomeDesign;
+}
+
+interface Listed extends Drawn {
   /** Linked from the header and footer; needs `header.nav.<id>`. */
   readonly nav: boolean;
 }
 
 export type HomeSection =
   /** Page opener with the only `h1`; must be the first enabled section. */
-  | {
+  | (Drawn & {
       readonly type: "hero";
       readonly id: IdsShaped<HeroCopy>;
-      readonly enabled: boolean;
-    }
+    })
   /** Cards side by side; `icons` maps item keys to icons (default: sparkles). */
   | (Listed & {
       readonly type: "cards";
@@ -80,17 +90,36 @@ export type HomeSection =
 export type HomeSectionType = HomeSection["type"];
 
 export const homeSections: readonly HomeSection[] = [
-  { type: "hero", id: "hero", enabled: true },
+  { type: "hero", id: "hero", enabled: true, design: "velora" },
   {
     type: "cards",
     id: "services",
     enabled: true,
+    design: "velora",
     nav: true,
     icons: { build: "code", run: "shield-check", host: "server" },
   },
-  { type: "steps", id: "approach", enabled: true, nav: true },
-  { type: "text", id: "about", enabled: true, nav: true },
-  { type: "contact", id: "contact", enabled: true, nav: true },
+  {
+    type: "steps",
+    id: "approach",
+    enabled: true,
+    design: "velora",
+    nav: true,
+  },
+  {
+    type: "text",
+    id: "about",
+    enabled: true,
+    design: "velora",
+    nav: true,
+  },
+  {
+    type: "contact",
+    id: "contact",
+    enabled: true,
+    design: "velora",
+    nav: true,
+  },
 ];
 
 const requiredFields: Readonly<Record<HomeSectionType, readonly string[]>> = {

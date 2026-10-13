@@ -20,8 +20,8 @@ export async function HeroSection({ id }: { readonly id: HeroSection["id"] }) {
       <div
         className={`${container} relative pt-20 pb-24 text-center sm:pt-28 sm:pb-32`}
       >
-        <p className="inline-flex items-center gap-2 rounded-full border border-line bg-surface/70 px-4 py-1.5 text-sm font-medium backdrop-blur motion-safe:animate-fade-up">
-          <SparklesIcon className="size-3.5 text-accent" />
+        <p className="inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-4 py-1.5 text-sm font-medium backdrop-blur motion-safe:animate-fade-up">
+          <SparklesIcon className="size-3.5 text-primary" />
           {t("eyebrow")}
         </p>
         {/* Not animated in: the heading and lead are the largest paint and
@@ -33,7 +33,7 @@ export async function HeroSection({ id }: { readonly id: HeroSection["id"] }) {
             ),
           })}
         </h1>
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-muted">
+        <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
           {t("lead")}
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4 motion-safe:animate-fade-up motion-safe:[animation-delay:150ms]">
@@ -44,7 +44,7 @@ export async function HeroSection({ id }: { readonly id: HeroSection["id"] }) {
           {site.productUrl ? (
             <a
               href={site.productUrl}
-              className="group inline-flex h-12 items-center gap-2 rounded-full px-6 text-sm font-medium hover:bg-group"
+              className="group inline-flex h-12 items-center gap-2 rounded-full px-6 text-sm font-medium hover:bg-muted"
             >
               {t("secondaryCta")}
               <ArrowRightIcon className="size-4 transition-transform motion-safe:group-hover:translate-x-0.5" />

@@ -23,7 +23,7 @@ export function ShimmerLink({
   return (
     <a
       href={href}
-      className={`relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-accent font-medium text-accent-fg shadow-lg shadow-accent/30 transition-[transform,box-shadow] duration-300 hover:shadow-xl hover:shadow-accent/40 active:scale-[0.98] motion-safe:hover:scale-[1.03] ${sizeClass[size]}`}
+      className={`relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-primary font-medium text-primary-foreground shadow-lg shadow-primary/30 transition-[transform,box-shadow] duration-300 hover:shadow-xl hover:shadow-primary/40 active:scale-[0.98] motion-safe:hover:scale-[1.03] ${sizeClass[size]}`}
     >
       <span className="relative z-10 inline-flex items-center gap-2">
         {children}

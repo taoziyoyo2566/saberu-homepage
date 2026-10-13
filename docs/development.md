@@ -241,19 +241,55 @@ npm run terraform -- plan                                          # 执行后�
 provider 版本由 Dependabot 更新；`.terraform.lock.hcl` 记录 linux_amd64 与 linux_arm64 的校验和，
 手动更新时运行 `npm run terraform -- providers lock -platform=linux_amd64 -platform=linux_arm64`。
 
+## 区块的两种设计与 shadcnblocks
+
+`homeSections` 中每个区块的 `design` 决定它用哪套组件绘制：`velora` 是 Velora UI 风格的现有设计
+（`src/components/sections/`），`shadcnblocks` 用 shadcnblocks.com 的免费区块
+（区块在 `src/components/shadcnblocks/`，读文案的对接组件在 `src/components/sections/shadcnblocks/`）。
+两种设计读同一份文案；`home-sections.tsx` 为每种版式登记每种设计的组件，缺一个就编译失败。
+首页目前全部用 `velora`；shadcnblocks 区块留给以后新增的版式或页面，买付费版后可按区块切换
+（[项目设计方案](reviews/homepage-foundation/plan-homepage-foundation-2026-10-11.md) 2026-10-14 的决定）。
+浏览器测试只覆盖配置中正在用的设计；切换设计后要重跑 `npm run e2e`。调查到的许可、价格与区块质量见
+[模板产品线调查记录](reviews/homepage-foundation/investigation-template-lines-2026-10-14.md)。
+
+shadcn/ui 的配置在 `components.json`：组件库为 Base UI（2026-07-02 起 shadcn/ui 的默认），样式 `base-nova`，
+登记了 shadcnblocks 的免费注册表（不需要密钥）。颜色变量沿用 shadcn/ui 的语义名，注册表中的组件和区块可以直接使用。
+`buttonVariants` 从 `button.tsx` 拆到了 `src/components/ui/button-variants.ts`：从 `button.tsx` 导入会把 Base UI 的
+`Button`（客户端组件）带进页面脚本。lucide-react 的图标也是客户端组件：只要 `home-sections.tsx` 登记了用到
+lucide 图标的区块，页面就会多加载约 2.5 KB（压缩前）的脚本，即使这些区块没有启用。
+
+添加一个 shadcnblocks 免费区块：
+
+1. 先看源码：`npx shadcn@4.21.4 view @shadcnblocks/<名称>`。shadcnblocks 的条款只允许通过 shadcn CLI
+   及基于它的工具自动获取注册表内容，不要用 curl 或脚本批量下载。
+2. `npx shadcn@4.21.4 add @shadcnblocks/<名称>`，不带 `-p`：带 `-p` 时 CLI 会把依赖的 `ui/` 组件
+   另复制一份到同一目录。区块文件生成在 `src/components/<名称>.tsx`，把它移到 `src/components/shadcnblocks/`。
+   CLI 只安装区块声明的 npm 依赖；新依赖的版本按 7 天冷却期选择（见“依赖版本与安全更新”）。
+3. 按以下要求修改区块，并在文件开头注明来源网址、条款位置与改动：
+   - 删除 `defaultProps` 的演示内容：缺文案时不能退回到虚构的客户、评价或数据；
+   - 链接写成带 `buttonVariants` 的 `<a>`，`buttonVariants` 从 `@/components/ui/button-variants` 导入：
+     Base UI 的 `Button` 渲染链接时会加 `role="button"`，shadcn/ui 文档也不建议这样渲染链接；
+   - 页面只有首屏一个 `h1`，其余区块从 `h2` 开始；
+   - 硬编码的颜色改用主题变量；`<img>` 会触发 lint 警告，确有图片时改用 `next/image`。
+4. 在 `src/components/sections/shadcnblocks/` 写对接组件：从 `home.<id>` 读文案，用 `BlockSection`
+   包住区块，提供 `/#<id>` 锚点和以标题命名的区域。然后在 `home-sections.tsx` 登记。
+5. 运行 `npm run check`、`npm run build` 与 `npm run e2e`，并在三种语言下查看排版。
+   这些区块按英文短标题设计，中文的大标题可能在词中间换行。
+
 ## 改什么，改哪里
 
 | 需求 | 位置 | 生效方式 |
 |---|---|---|
-| 文案 | `messages/{zh,en,ja}.json` | 三份键集合、ICU 参数与富文本标签必须一致，`npm run test` 校验。首页标题中 `<em>…</em>` 包住的部分显示为渐变色 |
+| 文案 | `messages/{zh,en,ja}.json` | 三份键集合、ICU 参数与富文本标签必须一致，`npm run test` 校验。Velora 设计中，首页标题里 `<em>…</em>` 包住的部分显示为渐变色；shadcnblocks 的首屏区块只显示纯文本 |
 | 首页显示哪些区块、顺序、哪些进导航 | `src/config/home.ts` 的 `homeSections` | 调整顺序或改 `enabled`、`nav` 即可；关闭的区块保留文案。新增区块时在每种语言加 `home.<id>`（进导航的再加 `header.nav.<id>`）；导入时自检、`npm run test` 检查三种语言，冒烟检查要求每个导航锚点都存在 |
+| 区块用哪种设计 | `homeSections` 中该区块的 `design`（`velora` 或 `shadcnblocks`） | 重新构建后生效；见“区块的两种设计与 shadcnblocks” |
 | 卡片、步骤的条目 | `messages/*.json` 中该区块的 `items` | 每种语言加同样的键即增加一项。卡片默认用 sparkles 图标，要换图标时在 `homeSections` 中该区块的 `icons` 按键登记（图标名见 `src/components/icons.tsx` 的 `iconsByName`） |
-| 新版式 | `src/components/sections/` 加组件，`src/config/home.ts` 的 `HomeSection` 加类型与必填字段，`home-sections.tsx` 加一个分支 | 类型检查要求每种版式都被渲染 |
+| 新版式 | 每种设计各加一个组件（`src/components/sections/` 与 `src/components/sections/shadcnblocks/`），`src/config/home.ts` 的 `HomeSection` 加类型与必填字段，`home-sections.tsx` 加一个分支并登记组件 | 类型检查要求每种版式在每种设计下都能渲染 |
 | 语言、默认语言、国家兜底、偏好 Cookie | `src/config/locales.ts` | 导入时自检，非法配置使构建失败 |
 | 品牌、域名、邮箱、产品入口、外链、内容状态 | `src/config/site.ts` | `npm run release:check` 决定能否发布 |
 | Cloudflare 上与主页有关的配置（DNS、Tunnel、跳转规则） | `infra/cloudflare/` | 生成计划、经用户批准后执行（见“Cloudflare 配置”） |
 | 新公开页面 | `src/app/[locale]/<path>/page.tsx`，并登记到 `src/config/public-pages.ts` | 未登记的路径由 proxy 返回 404，也不进入 sitemap |
-| 设计 token、字体栈 | `src/app/globals.css` | 浅深色与品牌色阶均在此定义。proxy 的 404 文档、`brandColors`（标志与生成的图片）和 `icon.svg` 读不到样式表，各自保留颜色副本；`tests/unit/design-tokens.test.ts` 检查它们与此一致 |
+| 设计 token、字体栈 | `src/app/globals.css` | 浅深色与品牌色阶均在此定义；颜色变量用 shadcn/ui 的语义名（`--background`、`--primary`、`--muted-foreground` 等），`--primary-soft` 与品牌色阶是本站补充。proxy 的 404 文档、`brandColors`（标志与生成的图片）和 `icon.svg` 读不到样式表，各自保留颜色副本；`tests/unit/design-tokens.test.ts` 检查它们与此一致 |
 | 品牌标志 | `src/app/icon.svg` 与 `src/components/brand-mark.tsx`（同一几何，需同步） | 图标、苹果图标、页眉标志与分享图 |
 | 地区头是否可信 | 环境变量 `TRUST_CF_IPCOUNTRY=true` | 仅当所有请求经 Cloudflare → Tunnel 到达时设置（P3） |
 | 被接受的开发期审计公告 | `audit-exceptions.json` | 必须写明理由与复核日期 |

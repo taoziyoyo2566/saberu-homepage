@@ -22,19 +22,21 @@ export async function SiteFooter() {
     currentYear(),
   ]);
   return (
-    <footer className="border-t border-line">
+    <footer className="border-t border-border">
       <div className="mx-auto grid w-full max-w-6xl gap-8 px-4 py-12 sm:px-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-start">
         <div>
           <p className="flex items-center gap-2 text-lg font-semibold tracking-tight">
             <BrandMark
               size={24}
               rounded
-              background="var(--accent)"
-              foreground="var(--accent-fg)"
+              background="var(--primary)"
+              foreground="var(--primary-foreground)"
             />
             {site.name}
           </p>
-          <p className="mt-3 text-sm text-muted">{hero("eyebrow")}</p>
+          <p className="mt-3 text-sm text-muted-foreground">
+            {hero("eyebrow")}
+          </p>
         </div>
         {/* Plain list, not a second navigation landmark: the header owns that. */}
         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
@@ -42,7 +44,7 @@ export async function SiteFooter() {
             <li key={section}>
               <Link
                 href={`/#${section}`}
-                className="text-muted transition-colors hover:text-foreground"
+                className="text-muted-foreground transition-colors hover:text-foreground"
               >
                 {header(`nav.${section}`)}
               </Link>
@@ -50,12 +52,12 @@ export async function SiteFooter() {
           ))}
         </ul>
       </div>
-      <div className="border-t border-line/70">
-        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-sm text-muted sm:px-6">
+      <div className="border-t border-border/70">
+        <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-6 text-sm text-muted-foreground sm:px-6">
           <span>{t("copyright", { year })}</span>
           <a
             href={`mailto:${site.contactEmail}`}
-            className="break-all transition-colors hover:text-accent"
+            className="break-all transition-colors hover:text-primary"
           >
             {site.contactEmail}
           </a>

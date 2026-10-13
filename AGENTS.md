@@ -17,6 +17,9 @@
   测试与冒烟脚本从这些来源读取期望值，不要在测试里写死文案或颜色。
 - 颜色 token 的唯一来源是 `src/app/globals.css`；404 文档、`brandColors` 与 `icon.svg` 中的副本要同步，
   `tests/unit/design-tokens.test.ts` 会检查。
+- 首页区块按 `src/config/home.ts` 中每项的 `design` 用 Velora 设计或 shadcnblocks 区块绘制。shadcn/ui 的配置在
+  `components.json`（Base UI），区块在 `src/components/shadcnblocks/`；添加区块的步骤与必改项见
+  `docs/development.md` 的“区块的两种设计与 shadcnblocks”。shadcnblocks 的注册表只通过 shadcn CLI 获取。
 - 文案当前是 demo（`contentStatus: "demo"`），未经品牌负责人确认；不要把它改成 `confirmed`。
 - `src/proxy.ts` 对未登记的文档路径直接返回 404 文档；新页面必须登记到 `public-pages.ts`，
   新的无扩展名元数据路由要加入 matcher（根目录，排除项锚定整条路径并补 `tests/unit/proxy-matcher.test.ts`）

@@ -1,18 +1,30 @@
 @import "tailwindcss";
 
-/* Design tokens. Light values first; dark values follow the system setting.
-   The palette follows Velora UI's default "Velora Blue" preset (see
+/* Design tokens, named as shadcn/ui names them so components and blocks from
+   its registries use them unchanged; `primary-soft` and the brand ramp are
+   this site's additions. Light values first; dark values follow the system
+   setting. The palette follows Velora UI's default "Velora Blue" preset (see
    THIRD_PARTY_NOTICES.md); the brand ramp feeds gradients and the aurora. */
 :root {
-  --bg: #ffffff;
-  --surface: #ffffff;
-  --group: #f5f5f5;
-  --fg: #0a0a0a;
-  --muted: #737373;
-  --line: #e5e5e5;
-  --accent: #155dfc;
-  --accent-fg: #fafafa;
-  --accent-soft: color-mix(in oklab, var(--accent) 10%, var(--bg));
+  --background: #ffffff;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --card-foreground: var(--foreground);
+  --popover: var(--card);
+  --popover-foreground: var(--foreground);
+  --primary: #155dfc;
+  --primary-foreground: #fafafa;
+  --primary-soft: color-mix(in oklab, var(--primary) 10%, var(--background));
+  --secondary: #f5f5f5;
+  --secondary-foreground: var(--foreground);
+  --muted: #f5f5f5;
+  --muted-foreground: #737373;
+  --accent: #f5f5f5;
+  --accent-foreground: var(--foreground);
+  --destructive: #e7000b;
+  --border: #e5e5e5;
+  --input: var(--border);
+  --ring: var(--primary);
   --brand-from: #155dfc;
   --brand-via: #2b7fff;
   --brand-to: #00a6f4;
@@ -21,16 +33,19 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0a0a0a;
-    --surface: #171717;
-    --group: #262626;
-    --fg: #fafafa;
-    --muted: #a1a1a1;
-    --line: #262626;
-    --accent: #2b7fff;
+    --background: #0a0a0a;
+    --foreground: #fafafa;
+    --card: #171717;
+    --primary: #2b7fff;
     /* White on this blue is 3.6:1, below WCAG AA; near-black is 5.3:1. */
-    --accent-fg: #0a0a0a;
-    --accent-soft: color-mix(in oklab, var(--accent) 16%, var(--bg));
+    --primary-foreground: #0a0a0a;
+    --primary-soft: color-mix(in oklab, var(--primary) 16%, var(--background));
+    --secondary: #262626;
+    --muted: #262626;
+    --muted-foreground: #a1a1a1;
+    --accent: #262626;
+    --destructive: #ff6467;
+    --border: #262626;
     --brand-from: #2b7fff;
     --brand-via: #51a2ff;
     --brand-to: #00bcff;
@@ -38,15 +53,25 @@
 }
 
 @theme inline {
-  --color-background: var(--bg);
-  --color-surface: var(--surface);
-  --color-group: var(--group);
-  --color-foreground: var(--fg);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
-  --color-line: var(--line);
+  --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
-  --color-accent-fg: var(--accent-fg);
-  --color-accent-soft: var(--accent-soft);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
   --color-brand-from: var(--brand-from);
   --color-brand-via: var(--brand-via);
   --color-brand-to: var(--brand-to);
@@ -85,7 +110,9 @@ html {
 }
 
 /* Tight display tracking suits Geist's Latin glyphs; CJK glyphs sit on a
-   full-width grid and crowd together when tightened. */
+   full-width grid and crowd together when tightened. Registry blocks use
+   Tailwind's tracking steps, so in the page content the negative ones are
+   neutral too; the Latin brand name in the header and footer keeps them. */
 @utility tracking-display {
   letter-spacing: -0.025em;
   &:lang(zh-Hans),
@@ -94,14 +121,52 @@ html {
   }
 }
 
-body {
-  background: var(--bg);
-  color: var(--fg);
+main:lang(zh-Hans),
+main:lang(ja) {
+  --tracking-tighter: 0em;
+  --tracking-tight: 0em;
 }
 
-:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+/* Registry blocks lay out inside `container`. Tailwind's version steps
+   through the breakpoint widths; the site's column is fluid up to the
+   header's width and gutters, so every step is overridden. */
+@utility container {
+  margin-inline: auto;
+  padding-inline: --spacing(4);
+  @variant sm {
+    max-width: var(--container-6xl);
+    padding-inline: --spacing(6);
+  }
+  @variant md {
+    max-width: var(--container-6xl);
+  }
+  @variant lg {
+    max-width: var(--container-6xl);
+  }
+  @variant xl {
+    max-width: var(--container-6xl);
+  }
+  @variant 2xl {
+    max-width: var(--container-6xl);
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Layered so that components which draw their own focus ring (shadcn/ui's
+   `outline-none` with `focus-visible:ring-*`) can turn this outline off. */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
 }
 
 /* Keyframes adapted from Velora UI. Every animation is decorative and runs

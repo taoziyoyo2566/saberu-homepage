@@ -37,15 +37,16 @@ const validCatalog = {
   },
 };
 const validSections: HomeSection[] = [
-  { type: "hero", id: "hero", enabled: true },
+  { type: "hero", id: "hero", enabled: true, design: "shadcnblocks" },
   {
     type: "cards",
     id: "services",
     enabled: true,
+    design: "velora",
     nav: true,
     icons: { build: "code" },
   },
-  { type: "text", id: "about", enabled: true, nav: true },
+  { type: "text", id: "about", enabled: true, design: "velora", nav: true },
 ];
 
 describe("home sections", () => {
@@ -79,7 +80,13 @@ describe("home sections", () => {
   it("check copy only for enabled sections", () => {
     const withDisabled: HomeSection[] = [
       ...validSections,
-      { type: "steps", id: "approach", enabled: false, nav: true },
+      {
+        type: "steps",
+        id: "approach",
+        enabled: false,
+        design: "velora",
+        nav: true,
+      },
     ];
     expect(findHomeSectionErrors(withDisabled, { en: validCatalog })).toEqual(
       [],

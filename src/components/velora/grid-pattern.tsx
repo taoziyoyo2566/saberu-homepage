@@ -17,7 +17,7 @@ export function GridPattern({
     <svg
       aria-hidden="true"
       className={cx(
-        "pointer-events-none absolute inset-0 size-full fill-none stroke-line",
+        "pointer-events-none absolute inset-0 size-full fill-none stroke-border",
         className,
       )}
     >
@@ -45,7 +45,7 @@ export function DotPattern({ className }: PatternProps) {
     <svg
       aria-hidden="true"
       className={cx(
-        "pointer-events-none absolute inset-0 size-full fill-muted/30",
+        "pointer-events-none absolute inset-0 size-full fill-muted-foreground/30",
         className,
       )}
     >
