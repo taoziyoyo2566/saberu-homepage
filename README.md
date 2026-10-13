@@ -42,7 +42,7 @@ npm run terraform -- plan                 # Cloudflare 配置的变更计划（�
 ```text
 src/app/[locale]/   根布局、首页、分享图、本地化 404、catch-all
 src/app/            healthz、sitemap、robots、图标、全局样式 token
-src/components/     页眉、页脚、语言切换器、首页分区、品牌标志
+src/components/     页眉、页脚、语言切换器、首页区块版式（sections/）、品牌标志
 src/config/         语言注册、站点信息与内容状态、公开页面清单（各自唯一来源）
 src/i18n/           协商纯函数、偏好 Cookie、next-intl 路由/导航/请求配置、404 文档
 src/proxy.ts        根路径协商、未知路径 404、元数据路由放行

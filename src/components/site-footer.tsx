@@ -2,7 +2,7 @@ import { cacheLife } from "next/cache";
 import { getTranslations } from "next-intl/server";
 
 import { BrandMark } from "@/components/brand-mark";
-import { homeSectionIds } from "@/components/home-sections";
+import { homeHero, homeNavSectionIds } from "@/config/home";
 import { site } from "@/config/site";
 import { Link } from "@/i18n/navigation";
 
@@ -18,7 +18,7 @@ export async function SiteFooter() {
   const [t, header, hero, year] = await Promise.all([
     getTranslations("footer"),
     getTranslations("header"),
-    getTranslations("home.hero"),
+    getTranslations(`home.${homeHero.id}`),
     currentYear(),
   ]);
   return (
@@ -38,7 +38,7 @@ export async function SiteFooter() {
         </div>
         {/* Plain list, not a second navigation landmark: the header owns that. */}
         <ul className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-          {homeSectionIds.map((section) => (
+          {homeNavSectionIds.map((section) => (
             <li key={section}>
               <Link
                 href={`/#${section}`}

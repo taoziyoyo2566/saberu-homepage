@@ -3,7 +3,7 @@ import { localeIds } from "@/config/locales";
 /**
  * Published public pages, without locale prefix. The proxy serves only these
  * (other paths get the 404 document) and the sitemap lists them; header
- * navigation is separate (`homeSectionIds` in src/components/home-sections.tsx).
+ * navigation is separate (`homeNavSectionIds` in src/config/home.ts).
  */
 export interface PublicPage {
   /** Absolute path without locale prefix; `/` is the home page. */
