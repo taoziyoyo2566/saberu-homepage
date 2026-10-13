@@ -2,10 +2,10 @@ import { expect, test } from "@playwright/test";
 
 import {
   copy,
+  heroTitleText,
   languageLabel,
   preferenceCookieName,
   site,
-  visibleText,
 } from "./fixtures";
 
 test.use({ javaScriptEnabled: false });
@@ -16,7 +16,7 @@ test("content and language links work without JavaScript", async ({
 }) => {
   await page.goto("/en");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    visibleText(copy.en.home.hero.title),
+    heroTitleText("en"),
   );
   await expect(
     page
