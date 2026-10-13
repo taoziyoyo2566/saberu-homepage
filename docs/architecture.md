@@ -20,7 +20,7 @@
                                    └─ 已登记页面        → next-intl middleware → App Router
                                                    │
                                    src/app/[locale]/layout.tsx（根布局，html lang、字体、metadataBase）
-                                   ├─ page.tsx（首页分区；canonical、hreflang、Open Graph）
+                                   ├─ page.tsx（按配置渲染首页区块；canonical、hreflang、Open Graph）
                                    ├─ opengraph-image.tsx（每种语言一张，构建时生成）
                                    └─ not-found.tsx／[...rest]（应用内 404 安全网）
 ```
@@ -35,7 +35,8 @@
 |---|---|---|
 | `src/config/locales.ts` | 语言注册（ID、BCP 47 标签、显示名、Open Graph 地区代码）、默认语言、国家兜底表、偏好 Cookie 名与期限；导入时自检 | 语言事实 |
 | `src/config/site.ts` | 品牌名、规范域名、联系邮箱、产品入口、外链、`contentStatus`（`placeholder`／`demo`／`confirmed`）；`findSiteReleaseErrors` 供发布门槛 | 站点事实 |
-| `src/config/public-pages.ts` | 已发布公开页面（无语言前缀）；proxy 与 sitemap 读取。页眉导航不读它，分区导航来自 `homeSectionIds` | 页面清单 |
+| `src/config/home.ts` | 首页区块：每项是一种版式（`hero`、`cards`、`steps`、`text`、`contact`）的一个实例，含 ID、是否启用、是否进入导航与版式参数；派生出启用的区块、导航锚点与首屏区块。类型把 ID 绑定到英文文案中形状匹配的 `home.<id>`；导入时自检结构与英文文案，`tests/unit/home-sections.test.ts` 检查每种语言 | 首页组成 |
+| `src/config/public-pages.ts` | 已发布公开页面（无语言前缀）；proxy 与 sitemap 读取。页眉导航不读它，区块导航来自 `src/config/home.ts` 的 `homeNavSectionIds` | 页面清单 |
 | `src/i18n/negotiation.ts` | 纯函数：解析 `Accept-Language`、best-fit 匹配、偏好 → 浏览器 → 可信国家 → 默认 | 协商规则 |
 | `src/i18n/preferences.ts` | `SABERU_LOCALE` 的读取与序列化（host-only、`Path=/`、`SameSite=Lax`、365 天、HTTPS 下 `Secure`） | 偏好 Cookie |
 | `src/i18n/routing.ts` | `defineRouting`：`localePrefix: 'always'`、`localeDetection: false`、`localeCookie: false`、`alternateLinks: false` | next-intl 配置 |
@@ -44,16 +45,16 @@
 | `src/i18n/not-found-document.ts` | proxy 返回的完整 404 文档（本地化、`noindex`、不回显路径、引用 `/icon.svg`）；读不到样式表，内联一份颜色 token 副本 | 404 文档 |
 | `src/proxy.ts` | 上文的分流逻辑；`TRUST_CF_IPCOUNTRY=true` 时才把 `CF-IPCountry` 交给协商 | 入口策略 |
 | `src/app/[locale]/layout.tsx` | 根布局；`generateStaticParams` 枚举语言；非法 locale 调用 `notFound()`；`metadataBase`、标题、描述 | 文档外壳 |
-| `src/app/[locale]/page.tsx` | 组合首页分区；页面级 `alternates`（canonical、三语 hreflang、`x-default=/`）与 `openGraph`（类型、站点名、URL、标题、描述、`og:locale` 与其他语言的 `og:locale:alternate`），错误页因此不继承 | 首页 |
+| `src/app/[locale]/page.tsx` | 渲染 `HomeSections`；页面级 `alternates`（canonical、三语 hreflang、`x-default=/`）与 `openGraph`（类型、站点名、URL、标题、描述、`og:locale` 与其他语言的 `og:locale:alternate`），错误页因此不继承 | 首页 |
 | `src/app/[locale]/opengraph-image.tsx` | 1200×630 品牌分享图，`generateStaticParams` 使每种语言在构建时生成一张；只含品牌标志、名称与域名，不随文案漂移 | 分享图 |
 | `src/app/icon.svg`、`src/app/apple-icon.tsx`、`src/components/brand-mark.tsx` | 网站图标、苹果触控图标（构建时生成的 PNG）、标志的 JSX 版本；几何一致，修改时同步 | 品牌标志 |
 | `src/app/[locale]/not-found.tsx`、`[...rest]/page.tsx` | 应用内 `notFound()` 的边界与安全网 | 应用内 404 |
 | `src/app/healthz/route.ts` | `connection()` 后返回 `{status:"ok"}`，`no-store` | 进程存活 |
 | `src/app/sitemap.ts`、`robots.ts` | 由语言注册与页面清单派生；每条列出全部语言含自身，首页含 `x-default` | 抓取信息 |
 | `src/app/globals.css` | Tailwind v4 导入、浅深色 token（`:root` + `prefers-color-scheme`，经 `@theme inline` 映射；含渐变与极光用的品牌色阶）、按 `:lang()` 的中日字体栈（作用于任何带 `lang` 的元素，如切换器中的语言名）、拉丁标题的紧排工具类、动效关键帧、焦点样式；404 文档、`brandColors` 与 `icon.svg` 中的颜色副本由 `tests/unit/design-tokens.test.ts` 对照 | 设计 token |
-| `src/components/home-sections.tsx` | 首页分区（主视觉、服务、工作方式、关于、联系）与 `homeSectionIds`；卡片按文案中的条目生成，服务卡片的图标按条目键选择 | 首页结构 |
+| `src/components/home-sections.tsx`、`src/components/sections/` | `HomeSections` 按配置顺序渲染启用的区块；`sections/` 每个文件是一种版式，从 `home.<id>` 读文案、以 ID 为锚点，进入导航的区块把导航名作为眉标；卡片与步骤按文案中的条目生成，卡片图标按配置中的图标名选择 | 区块版式 |
 | `src/components/velora/`、`src/components/icons.tsx` | 移植自 Velora UI 的视觉部件（极光背景、网格与点阵、渐变文字、带光泽的行动链接）与 Lucide 图标；都是服务端渲染、只用 CSS 动画，并遵守减少动效设置。许可声明见 `THIRD_PARTY_NOTICES.md` | 视觉部件 |
-| `src/components/site-header.tsx`、`site-footer.tsx` | 吸顶页眉（标志、按 `homeSectionIds` 生成的分区导航、切换器；窄屏时导航换到第二行）、页脚（分区链接、邮箱、`use cache` 的年份） | 页面框架 |
+| `src/components/site-header.tsx`、`site-footer.tsx` | 吸顶页眉（标志、按 `homeNavSectionIds` 生成的区块导航、切换器；窄屏时导航换到第二行）、页脚（首屏区块的眉标作标语、区块链接、邮箱、`use cache` 的年份） | 页面框架 |
 | `src/components/language-switcher.tsx` | 客户端组件：真实链接可无 JS 使用；有 JS 时写偏好 Cookie、`router.replace` 到目标语言并保留 query/hash/滚动意图 | 语言切换 |
 
 `messages/zh.json`、`en.json`、`ja.json` 的键集合、非空、ICU 参数与富文本标签由单元测试保证；

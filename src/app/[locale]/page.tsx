@@ -2,13 +2,7 @@ import type { Metadata } from "next";
 import { locale as rootLocale } from "next/root-params";
 import { getTranslations } from "next-intl/server";
 
-import {
-  HomeAbout,
-  HomeApproach,
-  HomeContact,
-  HomeHero,
-  HomeServices,
-} from "@/components/home-sections";
+import { HomeSections } from "@/components/home-sections";
 import { getLocaleDefinition, isLocale, locales } from "@/config/locales";
 import { site } from "@/config/site";
 
@@ -52,13 +46,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default function HomePage() {
-  return (
-    <>
-      <HomeHero />
-      <HomeServices />
-      <HomeApproach />
-      <HomeAbout />
-      <HomeContact />
-    </>
-  );
+  return <HomeSections />;
 }

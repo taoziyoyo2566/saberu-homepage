@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 
 import { BrandMark } from "@/components/brand-mark";
-import { homeSectionIds } from "@/components/home-sections";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { homeNavSectionIds } from "@/config/home";
 import { site } from "@/config/site";
 import { Link } from "@/i18n/navigation";
 
@@ -31,7 +31,7 @@ export async function SiteHeader() {
           className="order-last -mx-4 w-[calc(100%+2rem)] overflow-x-auto border-t border-line/70 sm:-mx-6 sm:w-[calc(100%+3rem)] md:order-none md:mx-0 md:w-auto md:border-0"
         >
           <ul className="flex gap-x-6 px-4 py-2.5 text-sm whitespace-nowrap sm:px-6 md:px-0 md:py-0">
-            {homeSectionIds.map((section) => (
+            {homeNavSectionIds.map((section) => (
               <li key={section}>
                 {/* Absolute so the links also work from any later page. */}
                 <Link

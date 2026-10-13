@@ -88,3 +88,14 @@ export function ArrowRightIcon(props: IconProps) {
     </Icon>
   );
 }
+
+/** Icons a home section configuration can name (`src/config/home.ts`). */
+export const iconsByName = {
+  code: CodeIcon,
+  mail: MailIcon,
+  server: ServerIcon,
+  "shield-check": ShieldCheckIcon,
+  sparkles: SparklesIcon,
+} as const satisfies Record<string, IconComponent>;
+
+export type IconName = keyof typeof iconsByName;

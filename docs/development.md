@@ -246,8 +246,9 @@ provider 版本由 Dependabot 更新；`.terraform.lock.hcl` 记录 linux_amd64 
 | 需求 | 位置 | 生效方式 |
 |---|---|---|
 | 文案 | `messages/{zh,en,ja}.json` | 三份键集合、ICU 参数与富文本标签必须一致，`npm run test` 校验。首页标题中 `<em>…</em>` 包住的部分显示为渐变色 |
-| 服务、工作方式卡片 | `messages/*.json` 的 `home.services.items`、`home.approach.items` | 每种语言加同样的键即增加卡片。新服务卡片使用默认图标，要换图标时在 `home-sections.tsx` 的 `serviceIcons` 中按键登记 |
-| 首页分区与导航 | `src/components/home-sections.tsx` 的 `homeSectionIds` 与对应组件 | 页眉导航读同一列表；冒烟检查要求每个导航锚点都存在 |
+| 首页显示哪些区块、顺序、哪些进导航 | `src/config/home.ts` 的 `homeSections` | 调整顺序或改 `enabled`、`nav` 即可；关闭的区块保留文案。新增区块时在每种语言加 `home.<id>`（进导航的再加 `header.nav.<id>`）；导入时自检、`npm run test` 检查三种语言，冒烟检查要求每个导航锚点都存在 |
+| 卡片、步骤的条目 | `messages/*.json` 中该区块的 `items` | 每种语言加同样的键即增加一项。卡片默认用 sparkles 图标，要换图标时在 `homeSections` 中该区块的 `icons` 按键登记（图标名见 `src/components/icons.tsx` 的 `iconsByName`） |
+| 新版式 | `src/components/sections/` 加组件，`src/config/home.ts` 的 `HomeSection` 加类型与必填字段，`home-sections.tsx` 加一个分支 | 类型检查要求每种版式都被渲染 |
 | 语言、默认语言、国家兜底、偏好 Cookie | `src/config/locales.ts` | 导入时自检，非法配置使构建失败 |
 | 品牌、域名、邮箱、产品入口、外链、内容状态 | `src/config/site.ts` | `npm run release:check` 决定能否发布 |
 | Cloudflare 上与主页有关的配置（DNS、Tunnel、跳转规则） | `infra/cloudflare/` | 生成计划、经用户批准后执行（见“Cloudflare 配置”） |
