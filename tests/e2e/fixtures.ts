@@ -13,6 +13,11 @@ import zh from "../../messages/zh.json";
 /** Expected copy comes from the same catalogs the app renders. */
 export const copy = { zh, en, ja } satisfies Record<Locale, typeof en>;
 
+/** Visible text of a rich-text message: its tags only style the words. */
+export function visibleText(message: string): string {
+  return message.replace(/<\/?[a-z]+>/g, "");
+}
+
 /** Visible name of a language in the switcher. */
 export function languageLabel(locale: Locale): string {
   return getLocaleDefinition(locale).label;

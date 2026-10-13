@@ -50,6 +50,9 @@ function collectArguments(
         }
         break;
       case TYPE.tag:
+        // Rich-text tags are rendered by the components, so every language
+        // must use the same ones.
+        into.add(`<${element.value}>`);
         collectArguments(element.children, into);
         break;
       default:
@@ -87,7 +90,7 @@ describe("messages", () => {
     }
   });
 
-  it("are valid ICU messages with the same arguments in every language", () => {
+  it("are valid ICU messages with the same arguments and tags in every language", () => {
     for (const [key, referenceText] of reference) {
       const expected = [
         ...collectArguments(parse(referenceText), new Set()),

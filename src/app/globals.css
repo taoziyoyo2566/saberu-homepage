@@ -1,28 +1,39 @@
 @import "tailwindcss";
 
-/* Design tokens. Light values first; dark values follow the system setting. */
+/* Design tokens. Light values first; dark values follow the system setting.
+   The palette follows Velora UI's default "Velora Blue" preset (see
+   THIRD_PARTY_NOTICES.md); the brand ramp feeds gradients and the aurora. */
 :root {
-  --bg: #f5f7f9;
+  --bg: #ffffff;
   --surface: #ffffff;
-  --group: #eef2f5;
-  --fg: #17212b;
-  --muted: #5b6875;
-  --line: #d3dae1;
-  --accent: #0a6c86;
-  --accent-soft: #e2f0f4;
+  --group: #f5f5f5;
+  --fg: #0a0a0a;
+  --muted: #737373;
+  --line: #e5e5e5;
+  --accent: #155dfc;
+  --accent-fg: #fafafa;
+  --accent-soft: color-mix(in oklab, var(--accent) 10%, var(--bg));
+  --brand-from: #155dfc;
+  --brand-via: #2b7fff;
+  --brand-to: #00a6f4;
   color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #0f151b;
-    --surface: #161e26;
-    --group: #1b252f;
-    --fg: #e4ebf1;
-    --muted: #9aa8b5;
-    --line: #2c3843;
-    --accent: #52b6d1;
-    --accent-soft: #123341;
+    --bg: #0a0a0a;
+    --surface: #171717;
+    --group: #262626;
+    --fg: #fafafa;
+    --muted: #a1a1a1;
+    --line: #262626;
+    --accent: #2b7fff;
+    /* White on this blue is 3.6:1, below WCAG AA; near-black is 5.3:1. */
+    --accent-fg: #0a0a0a;
+    --accent-soft: color-mix(in oklab, var(--accent) 16%, var(--bg));
+    --brand-from: #2b7fff;
+    --brand-via: #51a2ff;
+    --brand-to: #00bcff;
   }
 }
 
@@ -34,7 +45,11 @@
   --color-muted: var(--muted);
   --color-line: var(--line);
   --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
   --color-accent-soft: var(--accent-soft);
+  --color-brand-from: var(--brand-from);
+  --color-brand-via: var(--brand-via);
+  --color-brand-to: var(--brand-to);
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   --font-sans-zh:
     var(--font-geist-sans), "PingFang SC", "Hiragino Sans GB",
@@ -42,6 +57,12 @@
   --font-sans-ja:
     var(--font-geist-sans), "Hiragino Sans", "Hiragino Kaku Gothic ProN",
     "Yu Gothic", Meiryo, "Noto Sans CJK JP", system-ui, sans-serif;
+  --animate-aurora-1: aurora-1 14s ease-in-out infinite alternate;
+  --animate-aurora-2: aurora-2 18s ease-in-out infinite alternate;
+  --animate-aurora-3: aurora-3 22s ease-in-out infinite alternate;
+  --animate-gradient: gradient 6s ease infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
 }
 
 html {
@@ -63,6 +84,16 @@ html {
   word-break: auto-phrase;
 }
 
+/* Tight display tracking suits Geist's Latin glyphs; CJK glyphs sit on a
+   full-width grid and crowd together when tightened. */
+@utility tracking-display {
+  letter-spacing: -0.025em;
+  &:lang(zh-Hans),
+  &:lang(ja) {
+    letter-spacing: 0;
+  }
+}
+
 body {
   background: var(--bg);
   color: var(--fg);
@@ -71,4 +102,73 @@ body {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* Keyframes adapted from Velora UI. Every animation is decorative and runs
+   only through `motion-safe:` classes, so reduced-motion users see the
+   resting state. */
+@keyframes aurora-1 {
+  0% {
+    transform: translate(-10%, -12%) scale(1);
+  }
+  50% {
+    transform: translate(12%, 8%) scale(1.25);
+  }
+  100% {
+    transform: translate(-6%, 14%) scale(0.95);
+  }
+}
+
+@keyframes aurora-2 {
+  0% {
+    transform: translate(12%, 10%) scale(1.1);
+  }
+  50% {
+    transform: translate(-14%, -6%) scale(0.9);
+  }
+  100% {
+    transform: translate(8%, -12%) scale(1.2);
+  }
+}
+
+@keyframes aurora-3 {
+  0% {
+    transform: translate(0%, 16%) scale(0.95);
+  }
+  50% {
+    transform: translate(10%, -10%) scale(1.15);
+  }
+  100% {
+    transform: translate(-12%, 4%) scale(1);
+  }
+}
+
+@keyframes gradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }

@@ -19,7 +19,7 @@
   "home": {
     "hero": {
       "eyebrow": "Independent software studio",
-      "title": "We build focused web software and keep it running",
+      "title": "We build focused web software <em>and keep it running</em>",
       "lead": "Tell us the problem. We design the simplest software that solves it, build it, and maintain it after launch, on your own servers if you prefer.",
       "primaryCta": "Email us",
       "secondaryCta": "See the product"
